@@ -19,7 +19,7 @@ const Users = () => {
 
         try {
 
-            const response = await fetch('https://674a0b7b8680202966338398.mockapi.io/users')
+            const response = await fetch('/api/users')
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
