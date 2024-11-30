@@ -1,3 +1,4 @@
+import Dashboard from "@/components/Dashboard"
 import Sidebar from "@/components/Sidebar"
 
 
@@ -5,8 +6,10 @@ import Sidebar from "@/components/Sidebar"
 
 const page = () => {
   return (
-    <div>
+    <div className="flex h-[100vh] ">
         <Sidebar/>
+        <Dashboard/>
+
     </div>
   )
 }
