@@ -9,6 +9,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Notebook, User } from "lucide-react";
+import { Separator } from "./ui/separator";
+
 // import Dashboard from "../components/Dashboard"
 
 
@@ -45,8 +47,8 @@ const Sidebar = () => {
 
     return (
 
-        <div className="flex h-[100vh] ">
-            <aside className={cn("border-r-2 border-gray-700 flex flex-col justify-between items-center h-[100%] sm:px-5 ",
+        <div className="flex h-[100vh] overflow-hidden">
+            <aside className={cn("border-r-2 border-gray-700 flex flex-col justify-between items-center h-[100vh] sm:px-5",
                 { 'bg-gray-900': theme === 'dark' }
             )}>
 
@@ -80,6 +82,7 @@ const Sidebar = () => {
                 </div>
 
             </aside >
+            <Separator className="text-slate-200  " orientation="vertical" />
 
 
         </div >

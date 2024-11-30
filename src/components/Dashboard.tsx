@@ -7,6 +7,7 @@ import { Separator } from "./ui/separator"
 import ToggleMode from "./Togglemode"
 import Hero from "./Hero"
 import RightBar from "./Rightbar"
+import Users from "./Users"
 // import EpmtyWorkspace from "./EpmtyWorkspace"
 // import EmailWorkspace from "./EmailWorkspace"
 // import { Suspense } from "react"
@@ -31,8 +32,8 @@ const Dashboard = () => {
     const { theme } = useTheme()
 
     return (
-        <div className="flex flex-col justify-center items-center w-full h-[100%] overflow-y-scroll " >
-            <div className={cn("flex justify-between items-center w-full h-fit max-sm:mt-14 sm:mt14 md:mt-14 p-3",
+        <div className="flex flex-col justify-center items-center w-full h-screen overflow-y-auto overflow-hidden" >
+            <div className={cn("flex justify-between items-center w-full h-fit md:mt-14  p-3",
                 { 'bg-gray-900': theme === 'dark' }
             )} >
                 <h1 className={cn("text-xl font-bold", { 'text-gray-900': theme === 'light' })} >
@@ -48,13 +49,14 @@ const Dashboard = () => {
 
             {/* {isClickedHome && <EpmtyWorkspace/>} */}
             {/* {isClickedInbox && <EmailWorkspace/>} */}
-            <div className="flex max-sm:flex-col gap-5 justify-between items-start w-full h-[100vh] ">
+            <div className="flex flex-grow max-sm:flex-col gap-5 justify-between items-start w-full h-full ">
 
-                <div className=" sm:w-2/3" >
+                <div className=" sm:w-2/3 h-full" >
 
                     <Hero />
+                    <Users/>
                 </div>
-                <div className="sm:w-1/3 h-[100vh]">
+                <div className="sm:w-1/3 h-full">
                     <RightBar />
                 </div>
             </div>
