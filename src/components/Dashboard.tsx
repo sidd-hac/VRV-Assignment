@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     return (
         <div className="flex flex-col justify-center items-center w-full h-screen overflow-y-auto overflow-hidden" >
-            <div className={cn("flex justify-between items-center w-full h-fit md:mt-14  p-3",
+            <div className={cn("flex justify-between items-center w-full h-fit md:mt-14  p-3 border-l-[1px] border-slate-800",
                 { 'bg-gray-900': theme === 'dark' }
             )} >
                 <h1 className={cn("text-xl font-bold", { 'text-gray-900': theme === 'light' })} >

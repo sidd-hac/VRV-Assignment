@@ -16,22 +16,32 @@ const RegisterForm = () => {
         setMessage(null);
     
         try {
-          const response = await fetch('/api/users', {
+
+          
+            
+            
+
+          const response = await fetch('/api/user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, name, password}),
-          });
+            body: JSON.stringify({ email, name, password})
+          
+        });
+        console.log(email, name, password);
     
+        console.log(response);
           if (!response.ok) {
             throw new Error('Failed to create user');
           }
+          
     
           const data = await response.json();
           setMessage(`User ${data.name} added successfully!`);
-          setEmail('');
-          setPassword('');
+        //   setEmail('');
+        //   setPassword('');
+        //   setName('');
         } catch (error: unknown ) {
             if (error instanceof Error) {
                 setMessage(error.message);
@@ -65,6 +75,12 @@ const RegisterForm = () => {
                         required
                         className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md text-gray-900 dark:text-gray-200 dark:bg-gray-700 focus:ring-indigo-500 focus:border-indigo-500"
                     />
+                    <label
+                        htmlFor="name"
+                        className=" mt-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
+                        Name
+                    </label>
                     <input
                         type="name"
                         id="name"
@@ -92,7 +108,7 @@ const RegisterForm = () => {
                 
                 <Button  className="w-full px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Submit</Button>
 
-                < p className="text-red-500 font-bold text-sm" >{message}</>
+                <p className="text-red-500 font-bold text-sm" >{message}</p>
             </form>
         </div>
     );

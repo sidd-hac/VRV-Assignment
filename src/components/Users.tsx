@@ -5,21 +5,22 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { Separator } from "./ui/separator";
 import { Loader2 } from "lucide-react";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "./ui/pagination";
+import { Button } from "./ui/button";
+// import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "./ui/pagination";
 
 
 const Users = () => {
-    const {theme} = useTheme()
+    const { theme } = useTheme()
 
     const [users, setUsers] = useState([]);
-    
+
 
 
     const getUsers = async () => {
 
         try {
 
-            const response = await fetch('/api/users')
+            const response = await fetch('/api/user')
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -44,52 +45,61 @@ const Users = () => {
 
 
     return (
-        <div className={cn(`bg-slate-900 w-full m-5 rounded-xl` , {'bg-slate-200' : theme === 'light'})} >
-  {users ? (
-    <div>
+        <div className={cn(`bg-slate-900 w-full m-5 rounded-xl`, { 'bg-slate-200': theme === 'light' })} >
+        
+                <div>
 
-     <Table className="w-full p-10">
-     <TableCaption>A list of all users.</TableCaption>
-     <TableHeader>
-         <TableRow>
-             <TableHead className="w-[100px]">User</TableHead>
-             <TableHead>Status</TableHead>
-             <TableHead className="text-right">Role</TableHead>
-         </TableRow>
-         <Separator className="text-slate-700" />
-     </TableHeader>
-     
-     <TableBody>
-         {users.length > 0 ? (
-             users.map((user) => (
-                 <TableRow key={user.id}>
-                     <TableCell className="font-medium">{user.name}</TableCell>
-                     <TableCell className={user  ? "text-green-600" : "text-red-600"}>
-                         {user ? "Active" : "Inactive"}
-                     </TableCell>
-                     <TableCell className="text-right">
-                         <DropdownMenu>
-                             <DropdownMenuTrigger>{ "User"}</DropdownMenuTrigger>
-                             <DropdownMenuContent>
-                                 <DropdownMenuLabel>Assign Role</DropdownMenuLabel>
-                                 <DropdownMenuSeparator />
-                                 <DropdownMenuItem>User</DropdownMenuItem>
-                                 <DropdownMenuItem>Admin</DropdownMenuItem>
-                             </DropdownMenuContent>
-                         </DropdownMenu>
-                     </TableCell>
-                 </TableRow>
-             ))
-         ) : (
-             <TableRow>
-                 <TableCell colSpan={3} className="text-center">
-                     No users found.
-                 </TableCell>
-             </TableRow>
-         )}
-     </TableBody>
- </Table>
- <Pagination>
+                    <Table className="w-full p-10">
+                        <TableCaption>A list of all users.</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">User</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Edit</TableHead>
+                                <TableHead>Delete</TableHead>
+                                <TableHead className="text-right">Role</TableHead>
+                            </TableRow>
+                            <Separator className="text-slate-700" />
+                        </TableHeader>
+
+                        <TableBody>
+                            {users.length > 0 ? (
+                                users.map((user) => (
+                                    <TableRow key={user.id}>
+                                        <TableCell className="font-medium">{user.name}</TableCell>
+                                        <TableCell className={user ? "text-green-600" : "text-red-600"}>
+                                            {user ? "Active" : "Inactive"}
+                                        </TableCell>
+                                        <TableCell >
+                                            <Button className="px-1 py-[-1] text-green-500" >Edit</Button>
+                                        </TableCell>
+                                        <TableCell >
+                                            <Button className="px-1 py-[-1] text-red-500 ">Delete</Button>
+                                        </TableCell>
+                                        
+                                        <TableCell className="text-right">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger>{user.role}</DropdownMenuTrigger>
+                                                <DropdownMenuContent>
+                                                    <DropdownMenuLabel>Assign Role</DropdownMenuLabel>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem>User</DropdownMenuItem>
+                                                    <DropdownMenuItem>Admin</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-center">
+                                        <Loader2 className=" text-green-500 text-center animate-spin w-5 h-5" />
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                    {/* <Pagination>
  <PaginationContent>
    <PaginationItem>
      <PaginationPrevious href="#" />
@@ -104,11 +114,11 @@ const Users = () => {
      <PaginationNext href="#" />
    </PaginationItem>
  </PaginationContent>
-</Pagination>
-    </div>
+</Pagination> */}
+                </div>
 
-  ) : <Loader2 className="animate-spin w-10 h-10" />}
-           
+            
+
 
 
         </div>
