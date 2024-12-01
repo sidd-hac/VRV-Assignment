@@ -5,10 +5,11 @@ import { MoveRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 
+
 const AccessiblePage = () => {
 
-
-    useEffect(() => {
+    
+     useEffect(() => {
 
         const user = localStorage.getItem("user");
         if (!user) {
@@ -16,7 +17,14 @@ const AccessiblePage = () => {
             return;
         }
 
-    })
+     })
+  
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("authToken");
+        window.location.href = "/login";
+    }
 
 
     return (
@@ -24,13 +32,21 @@ const AccessiblePage = () => {
             <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
                 This page is accessible for users.
             </h1>
-            <Link href="/admin">
+            <div className="flex justify-center items-center gap-5">
+                <Link href="/admin">
 
-                <Button  >Admin dashboard
+                    <Button  >Admin dashboard
+                        <MoveRight className="w-5 h-5" />
+                    </Button>
+                    
+                </Link>
+
+                <Button onClick={handleLogout} >Logout
                     <MoveRight className="w-5 h-5" />
                 </Button>
 
-            </Link>
+            </div>
+
         </div>
     );
 };

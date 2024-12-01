@@ -5,36 +5,27 @@
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Notebook, User } from "lucide-react";
 import { Separator } from "./ui/separator";
-
-// import Dashboard from "../components/Dashboard"
-
 
 
 const Sidebar = () => {
 
 
     const { theme } = useTheme()
-    const searchParams = useSearchParams();
 
     useEffect(() => {
-        // This check ensures that the code only runs in the browser
+       
+        const user =  JSON.parse(localStorage.getItem("user") || "{ }");
 
-        // Get the token from the URL search params
-        const token = searchParams.get('token');
-        // Check if the token exists and store it in localStorage
-        if (token) {
-            localStorage.setItem('token', token);
-            console.log('Token saved to localStorage:', token);
-        } else {
-            console.log('No token found in URL');
-        }
+        if (!user) {
+            window.location.href = '/login';
+            return;
+        } 
 
-    }, [searchParams]);
+    }, []);
 
 
     const [selectedIcon, setSelectedIcon] = useState<string | null>("House");

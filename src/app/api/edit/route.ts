@@ -1,15 +1,15 @@
 import { PrismaClient } from "@prisma/client";
-import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 
 
 
 const prisma = new PrismaClient();
 
-const  PUT = async(req: NextApiRequest)  => {
+const  PUT = async(req: Request)  => {
  
+  const body = await req.json();
 
-  const { id, role } = req.body;
+  const { id, role } = body;
 
   // Validate input
   if (!id || !role) {
@@ -25,7 +25,6 @@ const  PUT = async(req: NextApiRequest)  => {
 
     return NextResponse.json({ message: "Role updated successfully", user: updatedUser } , {status : 200});
   } catch (error) {
-    console.error("Error updating role:", error);
     return NextResponse.json({ error: "Failed to update role" } , {status : 500});
   }
 }

@@ -1,7 +1,6 @@
 
 
 import { PrismaClient } from '@prisma/client';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 
 
@@ -56,17 +55,19 @@ const POST = async (req: Request) => {
 
 }
 
-const DELETE = async(req : NextApiRequest , res : NextApiResponse) => {
+const DELETE = async(req : Request ) => {
     
   if (req.method !== "DELETE") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return NextResponse.json({ error: "Method not allowed" } , {status : 405});
   }
 
-  const { id } = req.query;
+  const request = await req.json();
+
+  const {id} = request;
 
   // Validate input
   if (!id || typeof id !== "string") {
-    return res.status(400).json({ error: "User ID is required" });
+    return NextResponse.json({ error: "User ID is required" } ,{ status : 400});
   }
 
   try {
@@ -75,10 +76,9 @@ const DELETE = async(req : NextApiRequest , res : NextApiResponse) => {
       where: { id },
     });
 
-    return res.status(200).json({ message: "User deleted successfully", user: deletedUser });
+    return NextResponse.json({ message: "User deleted successfully", user: deletedUser } , {status : 200});
   } catch (error) {
-    console.error("Error deleting user:", error);
-    return res.status(500).json({ error: "Failed to delete user" });
+    return NextResponse.json({ error: "Failed to delete user" } , {status : 500});
   }
 
 }

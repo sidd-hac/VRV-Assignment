@@ -6,13 +6,24 @@ import { useTheme } from "next-themes";
 import { Separator } from "./ui/separator";
 import { Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
+
 // import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "./ui/pagination";
 
 
 const Users = () => {
     const { theme } = useTheme()
+    const [loading, setLoading] = useState(false);
 
-    const [users, setUsers] = useState([]);
+    interface user {
+        id: string;
+        name: string;
+        email: string;
+        role: string;
+      }
+
+    const [users, setUsers] = useState<user[]>([]);
+
+
 
 
 
@@ -44,119 +55,126 @@ const Users = () => {
 
 
 
-    const handleRole = async( id : string ,  role : string) => {
-         
-              try {
-                  
-                    const response = await fetch("/api/edit" ,{
-                        method: "PUT",
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ id ,role }),
-                      });
+    const handleRole = async (id: string, role: string) => {
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                console.log("Role changed successfully");
-                    
+        try {
 
-              } catch (error) {
-                 
-                console.log(error);
-              }
+            const response = await fetch("/api/edit", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id, role }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            console.log("Role changed successfully");
+
+             window.location.reload()
+        } catch (error) {
+
+            console.log(error);
+        }
 
     }
 
-    const handleDelete = async(id : string) =>{
-           
+    const handleDelete = async (id: string) => {
+
+
+        setLoading(true);
         try {
             const response = await fetch(`/api/user`, {
-              method: "DELETE",
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body : JSON.stringify({id})
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id })
             });
-      
+
             if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.error || "Failed to delete user");
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to delete user");
             }
-      
+
             const data = await response.json();
             console.log(data.id);
-            
-          
-          } catch (error: unknown) {
+
+            window.location.reload()
+        } catch (error: unknown) {
             if (error instanceof Error) {
-              console.log(error.message)
+                console.log(error.message)
             } else {
-              console.log("An unexpected error occurred.");
-              
+                console.log("An unexpected error occurred.");
+
             }
-          }
-            
+        }finally {
+            setLoading(false);
+        }
+
     }
 
 
     return (
         <div className={cn(`bg-slate-900 w-full m-5 rounded-xl`, { 'bg-slate-200': theme === 'light' })} >
-        
-                <div>
 
-                    <Table className="w-full p-10">
-                        <TableCaption>A list of all users.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[100px]">User</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Edit</TableHead>
-                                <TableHead>Delete</TableHead>
-                                <TableHead className="text-right">Role</TableHead>
-                            </TableRow>
-                            <Separator className="text-slate-700" />
-                        </TableHeader>
+            <div>
 
-                        <TableBody>
-                            {users.length > 0 ? (
-                                users.map((user) => (
-                                    <TableRow key={user.id}>
-                                        <TableCell className="font-medium">{user.name}</TableCell>
-                                        <TableCell className={user ? "text-green-600" : "text-red-600"}>
-                                            {user ? "Active" : "Inactive"}
-                                        </TableCell>
-                                        <TableCell >
-                                            <Button className="px-1 py-[-1] text-green-500" >Edit</Button>
-                                        </TableCell>
-                                        <TableCell >
-                                            <Button className="px-1 py-[-1] text-red-500 " onClick={ () => handleDelete(user.id)}>Delete</Button>
-                                        </TableCell>
-                                        
-                                        <TableCell className="text-right">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger>{user.role}</DropdownMenuTrigger>
-                                                <DropdownMenuContent>
-                                                    <DropdownMenuLabel>Assign Role</DropdownMenuLabel>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem onClick={ () => handleRole(user.id ,"user")} >User</DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={ () => handleRole(user.id ,"admin")}>Admin</DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={3} className="text-center">
-                                        <Loader2 className=" text-green-500 text-center animate-spin w-5 h-5" />
+                <Table className="w-full p-10">
+                    <TableCaption>A list of all users.</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[100px]">User</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Edit</TableHead>
+                            <TableHead>Delete</TableHead>
+                            <TableHead className="text-right">Role</TableHead>
+                        </TableRow>
+                        <Separator className="text-slate-700" />
+                    </TableHeader>
+
+                    <TableBody>
+                        {users.length > 0 ? (
+                            users.map((user) => (
+                                <TableRow key={user.id}>
+                                    <TableCell className="font-medium">{user.name}</TableCell>
+                                    <TableCell className={user ? "text-green-600" : "text-red-600"}>
+                                        {user ? "Active" : "Inactive"}
+                                    </TableCell>
+                                    <TableCell >
+                                        <Button className={cn(`px-3 py-[-1] text-green-500` , {'bg-white' : theme === 'light'})} >Edit</Button>
+                                    </TableCell>
+                                    <TableCell >
+                                        <Button className={cn(`px-1 py-[-1] text-red-500` , {'bg-white' : theme === 'light'})}onClick={() => handleDelete(user.id)}>
+                                            Delete
+                                            {loading && <Loader2 className="w-3 h-3" />}
+                                        </Button>
+                                    </TableCell>
+
+                                    <TableCell className="text-right">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="font bold" >{user.role}</DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuLabel>Assign Role</DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem onClick={() => handleRole(user.id, "user")} >User</DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleRole(user.id, "admin")}>Admin</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                    {/* <Pagination>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={3} className="text-center">
+                                    <Loader2 className=" text-green-500 text-center animate-spin w-5 h-5" />
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+                {/* <Pagination>
  <PaginationContent>
    <PaginationItem>
      <PaginationPrevious href="#" />
@@ -172,9 +190,9 @@ const Users = () => {
    </PaginationItem>
  </PaginationContent>
 </Pagination> */}
-                </div>
+            </div>
 
-            
+
 
 
 
