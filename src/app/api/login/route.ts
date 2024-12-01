@@ -1,5 +1,4 @@
 
-import { NextApiRequest } from 'next';
 import jwt from 'jsonwebtoken';
 import {  PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
@@ -9,10 +8,10 @@ const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key';
 const prisma = new PrismaClient();
 
 
-const POST = async (req: NextApiRequest) => {
+const POST = async (req: Request) => {
   
-
-  const { email, password } = req.body;
+  const body = await req.json();
+  const { email, password } = body;
   console.log(email, password);
   
 
@@ -35,7 +34,7 @@ const POST = async (req: NextApiRequest) => {
       expiresIn: '1h',
     });
 
-    return NextResponse.json({ token, message: 'Login successful' });
+    return NextResponse.json({ token, message: 'Login successful', user });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json({ error: 'Internal server error'  },{status : 500});

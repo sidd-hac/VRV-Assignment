@@ -48,8 +48,9 @@ const Sidebar = () => {
     return (
 
         <div className="flex h-[100vh] overflow-hidden">
-            <aside className={cn("border-r-[1px] border-gray-200 flex flex-col justify-between items-center h-[100vh] sm:px-5",
-                { 'bg-gray-900': theme === 'dark' }
+            <aside className={cn("border-r-[1px] border-gray-400 flex flex-col justify-between items-center h-[100vh] sm:px-5",
+                { 'bg-gray-900': theme === 'dark' },
+                {'bg-slate-200 ' : theme === 'light'}
             )}>
 
                 <div className="flex justify-center mt-4">

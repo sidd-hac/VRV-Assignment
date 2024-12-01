@@ -16,6 +16,8 @@ const Users = () => {
 
 
 
+
+
     const getUsers = async () => {
 
         try {
@@ -42,6 +44,61 @@ const Users = () => {
 
 
 
+    const handleRole = async( id : string ,  role : string) => {
+         
+              try {
+                  
+                    const response = await fetch("/api/edit" ,{
+                        method: "PUT",
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ id ,role }),
+                      });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                console.log("Role changed successfully");
+                    
+
+              } catch (error) {
+                 
+                console.log(error);
+              }
+
+    }
+
+    const handleDelete = async(id : string) =>{
+           
+        try {
+            const response = await fetch(`/api/user`, {
+              method: "DELETE",
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body : JSON.stringify({id})
+            });
+      
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || "Failed to delete user");
+            }
+      
+            const data = await response.json();
+            console.log(data.id);
+            
+          
+          } catch (error: unknown) {
+            if (error instanceof Error) {
+              console.log(error.message)
+            } else {
+              console.log("An unexpected error occurred.");
+              
+            }
+          }
+            
+    }
 
 
     return (
@@ -74,7 +131,7 @@ const Users = () => {
                                             <Button className="px-1 py-[-1] text-green-500" >Edit</Button>
                                         </TableCell>
                                         <TableCell >
-                                            <Button className="px-1 py-[-1] text-red-500 ">Delete</Button>
+                                            <Button className="px-1 py-[-1] text-red-500 " onClick={ () => handleDelete(user.id)}>Delete</Button>
                                         </TableCell>
                                         
                                         <TableCell className="text-right">
@@ -83,8 +140,8 @@ const Users = () => {
                                                 <DropdownMenuContent>
                                                     <DropdownMenuLabel>Assign Role</DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>User</DropdownMenuItem>
-                                                    <DropdownMenuItem>Admin</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={ () => handleRole(user.id ,"user")} >User</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={ () => handleRole(user.id ,"admin")}>Admin</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>

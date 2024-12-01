@@ -1,7 +1,7 @@
 
 
 import { PrismaClient } from '@prisma/client';
-import { NextApiRequest } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 
 
@@ -14,15 +14,17 @@ const GET = async () => {
     const users = await prisma.user.findMany();
     return NextResponse.json(users);
   } catch (error) {
-    console.error('Error fetching users:', error);
-    return NextResponse.json({ error: 'Failed to fetch users' }, {status : 500});
+   
+     return NextResponse.json({ error: 'Failed to fetch users' }, {status : 500});
   }
 
 }
 
-const POST = async (req: NextApiRequest) => {
+const POST = async (req: Request) => {
 
-  const { email, name, password } = req.body;
+  const body = await req.json();
+
+  const { email, name, password } = body;
 
   console.log(email, name, password);
 
@@ -54,7 +56,34 @@ const POST = async (req: NextApiRequest) => {
 
 }
 
+const DELETE = async(req : NextApiRequest , res : NextApiResponse) => {
+    
+  if (req.method !== "DELETE") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const { id } = req.query;
+
+  // Validate input
+  if (!id || typeof id !== "string") {
+    return res.status(400).json({ error: "User ID is required" });
+  }
+
+  try {
+    // Delete the user from the database
+    const deletedUser = await prisma.user.delete({
+      where: { id },
+    });
+
+    return res.status(200).json({ message: "User deleted successfully", user: deletedUser });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return res.status(500).json({ error: "Failed to delete user" });
+  }
+
+}
 
 
 
-export { GET, POST };
+
+export { GET, POST , DELETE };

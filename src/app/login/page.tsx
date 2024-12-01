@@ -15,6 +15,8 @@ const LoginForm = () => {
         e.preventDefault();
         setMessage(null);
         setLoading(true);
+
+        console.log(email, password);
     
         try {
           const response = await fetch('/api/login', {
@@ -31,10 +33,11 @@ const LoginForm = () => {
           }
     
           const data = await response.json();
-          const { token } = data;
+          const { token , user } = data;
 
           // Save token to localStorage
           localStorage.setItem("authToken", token);
+          localStorage.setItem("user", JSON.stringify(user));
 
           console.log("Login successful:", data);
     

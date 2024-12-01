@@ -14,13 +14,11 @@ const RegisterForm = () => {
     const handleSubmit = async (e :React.FormEvent) => {
         e.preventDefault();
         setMessage(null);
+
+        console.log(email, name, password);
     
         try {
-
-          
-            
-            
-
+        
           const response = await fetch('/api/user', {
             method: 'POST',
             headers: {
@@ -29,7 +27,7 @@ const RegisterForm = () => {
             body: JSON.stringify({ email, name, password})
           
         });
-        console.log(email, name, password);
+        
     
         console.log(response);
           if (!response.ok) {
